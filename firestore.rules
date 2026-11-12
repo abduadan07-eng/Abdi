@@ -1,0 +1,103 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    function isAuthenticated() {
+      return request.auth != null;
+    }
+
+    function isSingleSchool(schoolId) {
+      return schoolId == "iftin_school_2026";
+    }
+
+    // School config: read by any authenticated user; created/updated by authenticated users during setup or admin
+    match /school_config/{configId} {
+      allow read: if isAuthenticated();
+      allow write: if isAuthenticated() && isSingleSchool(request.resource.data.schoolId);
+    }
+
+    // Users: each user manages their own document; anyone authenticated can read basic user profile
+    match /users/{userId} {
+      allow read: if isAuthenticated();
+      allow write: if isAuthenticated() && (request.auth.uid == userId || resource == null);
+    }
+
+    // Teachers
+    match /teachers/{teacherId} {
+      allow read: if isAuthenticated();
+      allow write: if isAuthenticated() && isSingleSchool(request.resource.data.schoolId);
+    }
+
+    // Classes
+    match /classes/{classId} {
+      allow read: if isAuthenticated();
+      allow write: if isAuthenticated() && isSingleSchool(request.resource.data.schoolId);
+    }
+
+    // Students
+    match /students/{studentId} {
+      allow read: if isAuthenticated();
+      allow write: if isAuthenticated() && isSingleSchool(request.resource.data.schoolId);
+    }
+
+    // Parents
+    match /parents/{parentId} {
+      allow read: if isAuthenticated();
+      allow write: if isAuthenticated() && (request.auth.uid == parentId || request.auth.uid == resource.data.parentId);
+    }
+
+    // Attendance
+    match /attendance/{attendanceId} {
+      allow read: if isAuthenticated();
+      allow write: if isAuthenticated() && isSingleSchool(request.resource.data.schoolId);
+    }
+
+    // Examinations
+    match /examinations/{examId} {
+      allow read: if isAuthenticated();
+      allow write: if isAuthenticated() && isSingleSchool(request.resource.data.schoolId);
+    }
+
+    // Exam Results: published results can be read; editing done by authorized staff
+    match /exam_results/{resultId} {
+      allow read: if isAuthenticated();
+      allow write: if isAuthenticated() && isSingleSchool(request.resource.data.schoolId);
+    }
+
+    // Fees
+    match /fees/{feeId} {
+      allow read: if isAuthenticated();
+      allow write: if isAuthenticated() && isSingleSchool(request.resource.data.schoolId);
+    }
+
+    // Fee Payments
+    match /fee_payments/{paymentId} {
+      allow read: if isAuthenticated();
+      allow write: if isAuthenticated() && isSingleSchool(request.resource.data.schoolId);
+    }
+
+    // Timetables
+    match /timetables/{timetableId} {
+      allow read: if isAuthenticated();
+      allow write: if isAuthenticated() && isSingleSchool(request.resource.data.schoolId);
+    }
+
+    // Homework
+    match /homework/{homeworkId} {
+      allow read: if isAuthenticated();
+      allow write: if isAuthenticated() && isSingleSchool(request.resource.data.schoolId);
+    }
+
+    // Remarks
+    match /remarks/{remarkId} {
+      allow read: if isAuthenticated();
+      allow write: if isAuthenticated() && isSingleSchool(request.resource.data.schoolId);
+    }
+
+    // Notifications
+    match /notifications/{notificationId} {
+      allow read: if isAuthenticated();
+      allow write: if isAuthenticated() && isSingleSchool(request.resource.data.schoolId);
+    }
+  }
+}

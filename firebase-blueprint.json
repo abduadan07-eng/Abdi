@@ -1,0 +1,332 @@
+{
+  "entities": {
+    "SchoolConfig": {
+      "title": "School Configuration",
+      "description": "Fixed single school configuration and settings",
+      "type": "object",
+      "properties": {
+        "schoolId": { "type": "string" },
+        "name": { "type": "string" },
+        "address": { "type": "string" },
+        "phone": { "type": "string" },
+        "email": { "type": "string" },
+        "academicYear": { "type": "string" },
+        "adminPasscode": { "type": "string" },
+        "adminUid": { "type": "string" },
+        "createdAt": { "type": "string", "format": "date-time" },
+        "updatedAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["schoolId", "name"]
+    },
+    "User": {
+      "title": "User Profile",
+      "description": "Authenticated user profile with role assignment",
+      "type": "object",
+      "properties": {
+        "userId": { "type": "string" },
+        "email": { "type": "string" },
+        "name": { "type": "string" },
+        "role": { "type": "string", "enum": ["ADMIN", "TEACHER", "PARENT"] },
+        "schoolId": { "type": "string" },
+        "language": { "type": "string", "enum": ["so", "en"] },
+        "createdAt": { "type": "string", "format": "date-time" },
+        "updatedAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["userId", "role", "schoolId"]
+    },
+    "Teacher": {
+      "title": "Teacher",
+      "description": "Registered school teacher details and assigned classes",
+      "type": "object",
+      "properties": {
+        "teacherId": { "type": "string" },
+        "schoolId": { "type": "string" },
+        "fullName": { "type": "string" },
+        "phone": { "type": "string" },
+        "email": { "type": "string" },
+        "assignedClasses": { "type": "array" },
+        "subjects": { "type": "array" },
+        "status": { "type": "string" },
+        "createdAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["teacherId", "schoolId", "fullName"]
+    },
+    "ClassRoom": {
+      "title": "Class Room",
+      "description": "School class definition",
+      "type": "object",
+      "properties": {
+        "classId": { "type": "string" },
+        "schoolId": { "type": "string" },
+        "name": { "type": "string" },
+        "classTeacherId": { "type": "string" },
+        "subjects": { "type": "array" },
+        "academicYear": { "type": "string" },
+        "accessCode": { "type": "string" },
+        "studentCount": { "type": "number" }
+      },
+      "required": ["classId", "schoolId", "name"]
+    },
+    "Student": {
+      "title": "Student",
+      "description": "Registered student with secure linking code",
+      "type": "object",
+      "properties": {
+        "studentId": { "type": "string" },
+        "schoolId": { "type": "string" },
+        "fullName": { "type": "string" },
+        "fatherName": { "type": "string" },
+        "motherName": { "type": "string" },
+        "parentPhone": { "type": "string" },
+        "gender": { "type": "string" },
+        "classId": { "type": "string" },
+        "admissionDate": { "type": "string" },
+        "linkingCode": { "type": "string" },
+        "status": { "type": "string" },
+        "createdAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["studentId", "schoolId", "fullName", "classId"]
+    },
+    "Parent": {
+      "title": "Parent",
+      "description": "Parent account linking verified children",
+      "type": "object",
+      "properties": {
+        "parentId": { "type": "string" },
+        "schoolId": { "type": "string" },
+        "fullName": { "type": "string" },
+        "phone": { "type": "string" },
+        "email": { "type": "string" },
+        "linkedStudentIds": { "type": "array" }
+      },
+      "required": ["parentId", "schoolId"]
+    },
+    "Attendance": {
+      "title": "Attendance Register",
+      "description": "Daily student attendance for a class",
+      "type": "object",
+      "properties": {
+        "attendanceId": { "type": "string" },
+        "schoolId": { "type": "string" },
+        "classId": { "type": "string" },
+        "date": { "type": "string" },
+        "teacherId": { "type": "string" },
+        "records": { "type": "array" },
+        "presentCount": { "type": "number" },
+        "absentCount": { "type": "number" },
+        "lateCount": { "type": "number" },
+        "excusedCount": { "type": "number" }
+      },
+      "required": ["attendanceId", "schoolId", "classId", "date"]
+    },
+    "Examination": {
+      "title": "Examination",
+      "description": "Class examination definition and approval status",
+      "type": "object",
+      "properties": {
+        "examId": { "type": "string" },
+        "schoolId": { "type": "string" },
+        "name": { "type": "string" },
+        "examType": { "type": "string" },
+        "classId": { "type": "string" },
+        "academicYear": { "type": "string" },
+        "startDate": { "type": "string" },
+        "endDate": { "type": "string" },
+        "subjects": { "type": "array" },
+        "status": { "type": "string" },
+        "createdAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["examId", "schoolId", "name", "classId", "status"]
+    },
+    "ExamResult": {
+      "title": "Exam Result",
+      "description": "Student exam result with marks, grade, and competition position",
+      "type": "object",
+      "properties": {
+        "resultId": { "type": "string" },
+        "schoolId": { "type": "string" },
+        "examId": { "type": "string" },
+        "studentId": { "type": "string" },
+        "studentName": { "type": "string" },
+        "classId": { "type": "string" },
+        "subjectMarks": { "type": "object" },
+        "totalObtained": { "type": "number" },
+        "totalMax": { "type": "number" },
+        "percentage": { "type": "number" },
+        "average": { "type": "number" },
+        "grade": { "type": "string" },
+        "position": { "type": "number" },
+        "teacherRemarks": { "type": "string" },
+        "status": { "type": "string" }
+      },
+      "required": ["resultId", "schoolId", "examId", "studentId"]
+    },
+    "Fee": {
+      "title": "School Fee",
+      "description": "School fee record assigned to class",
+      "type": "object",
+      "properties": {
+        "feeId": { "type": "string" },
+        "schoolId": { "type": "string" },
+        "feeName": { "type": "string" },
+        "classId": { "type": "string" },
+        "amount": { "type": "number" },
+        "dueDate": { "type": "string" },
+        "description": { "type": "string" },
+        "academicYear": { "type": "string" }
+      },
+      "required": ["feeId", "schoolId", "feeName", "amount"]
+    },
+    "FeePayment": {
+      "title": "Fee Payment",
+      "description": "Student payment record and balance",
+      "type": "object",
+      "properties": {
+        "paymentId": { "type": "string" },
+        "schoolId": { "type": "string" },
+        "feeId": { "type": "string" },
+        "feeName": { "type": "string" },
+        "studentId": { "type": "string" },
+        "studentName": { "type": "string" },
+        "classId": { "type": "string" },
+        "amount": { "type": "number" },
+        "amountPaid": { "type": "number" },
+        "balance": { "type": "number" },
+        "status": { "type": "string" },
+        "paymentDate": { "type": "string" },
+        "receiptNo": { "type": "string" }
+      },
+      "required": ["paymentId", "schoolId", "feeId", "studentId"]
+    },
+    "Timetable": {
+      "title": "Class Timetable",
+      "description": "Class schedule slot",
+      "type": "object",
+      "properties": {
+        "timetableId": { "type": "string" },
+        "schoolId": { "type": "string" },
+        "classId": { "type": "string" },
+        "day": { "type": "string" },
+        "subject": { "type": "string" },
+        "teacherName": { "type": "string" },
+        "startTime": { "type": "string" },
+        "endTime": { "type": "string" },
+        "roomNo": { "type": "string" }
+      },
+      "required": ["timetableId", "schoolId", "classId", "day", "subject"]
+    },
+    "Homework": {
+      "title": "Homework",
+      "description": "Homework assigned to a class",
+      "type": "object",
+      "properties": {
+        "homeworkId": { "type": "string" },
+        "schoolId": { "type": "string" },
+        "classId": { "type": "string" },
+        "subject": { "type": "string" },
+        "title": { "type": "string" },
+        "description": { "type": "string" },
+        "assignedDate": { "type": "string" },
+        "dueDate": { "type": "string" },
+        "teacherName": { "type": "string" }
+      },
+      "required": ["homeworkId", "schoolId", "classId", "title"]
+    },
+    "Remark": {
+      "title": "Student Remark",
+      "description": "Teacher note for student and parent",
+      "type": "object",
+      "properties": {
+        "remarkId": { "type": "string" },
+        "schoolId": { "type": "string" },
+        "studentId": { "type": "string" },
+        "studentName": { "type": "string" },
+        "teacherId": { "type": "string" },
+        "teacherName": { "type": "string" },
+        "date": { "type": "string" },
+        "category": { "type": "string" },
+        "message": { "type": "string" }
+      },
+      "required": ["remarkId", "schoolId", "studentId", "category", "message"]
+    },
+    "Notification": {
+      "title": "Notification",
+      "description": "System and school notification",
+      "type": "object",
+      "properties": {
+        "notificationId": { "type": "string" },
+        "schoolId": { "type": "string" },
+        "targetRole": { "type": "string" },
+        "targetUserId": { "type": "string" },
+        "targetStudentId": { "type": "string" },
+        "title": { "type": "string" },
+        "message": { "type": "string" },
+        "date": { "type": "string" },
+        "isRead": { "type": "boolean" }
+      },
+      "required": ["notificationId", "schoolId", "title", "message"]
+    }
+  },
+  "firestore": {
+    "/school_config/{configId}": {
+      "schema": { "$ref": "#/entities/SchoolConfig" },
+      "description": "Single school configuration and settings"
+    },
+    "/users/{userId}": {
+      "schema": { "$ref": "#/entities/User" },
+      "description": "User profiles and role assignments"
+    },
+    "/teachers/{teacherId}": {
+      "schema": { "$ref": "#/entities/Teacher" },
+      "description": "School teachers list"
+    },
+    "/classes/{classId}": {
+      "schema": { "$ref": "#/entities/ClassRoom" },
+      "description": "School classes"
+    },
+    "/students/{studentId}": {
+      "schema": { "$ref": "#/entities/Student" },
+      "description": "Enrolled students"
+    },
+    "/parents/{parentId}": {
+      "schema": { "$ref": "#/entities/Parent" },
+      "description": "Parent linked student mappings"
+    },
+    "/attendance/{attendanceId}": {
+      "schema": { "$ref": "#/entities/Attendance" },
+      "description": "Daily attendance registers"
+    },
+    "/examinations/{examId}": {
+      "schema": { "$ref": "#/entities/Examination" },
+      "description": "Examinations and release status"
+    },
+    "/exam_results/{resultId}": {
+      "schema": { "$ref": "#/entities/ExamResult" },
+      "description": "Student marks and competition rankings"
+    },
+    "/fees/{feeId}": {
+      "schema": { "$ref": "#/entities/Fee" },
+      "description": "Class fees"
+    },
+    "/fee_payments/{paymentId}": {
+      "schema": { "$ref": "#/entities/FeePayment" },
+      "description": "Student fee payments and balances"
+    },
+    "/timetables/{timetableId}": {
+      "schema": { "$ref": "#/entities/Timetable" },
+      "description": "Weekly class timetable schedules"
+    },
+    "/homework/{homeworkId}": {
+      "schema": { "$ref": "#/entities/Homework" },
+      "description": "Assigned class homework"
+    },
+    "/remarks/{remarkId}": {
+      "schema": { "$ref": "#/entities/Remark" },
+      "description": "Teacher remarks on students"
+    },
+    "/notifications/{notificationId}": {
+      "schema": { "$ref": "#/entities/Notification" },
+      "description": "School notifications"
+    }
+  }
+}

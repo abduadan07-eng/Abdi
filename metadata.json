@@ -1,0 +1,8 @@
+{
+  "name": "Iftin School",
+  "description": "Professional Single-School Management System for Admin, Teachers, and Parents in Somali and English.",
+  "requestFramePermissions": [],
+  "majorCapabilities": [
+    "MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"
+  ]
+}
